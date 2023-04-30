@@ -1,0 +1,44 @@
+version: '3'
+name: yc-festival-web
+services:
+  frontend:
+    build: 
+      context: frontend
+      target: development
+    networks:
+      - client-side
+    ports:
+      - "3000:3000"
+
+  backend:
+    build:
+      context: backend
+      target: development
+    environment:
+      - ADDRESS=0.0.0.0:8000
+      - RUST_LOG=debug
+    networks:
+      - client-side
+      - server-side
+    depends_on:
+      - db
+  
+  db:
+    image: "redis:bullseye"
+    restart: always
+    environment:
+      - name=value
+    networks:
+      - server-side
+    ports:
+      - "6379:6379"
+    volumes:
+      - db-data:/var/lib/redis/data
+    
+networks:
+  client-side: {}
+  server-side: {}
+
+volumes:
+  backend-cache: {}
+  db-data: {}
