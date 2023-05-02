@@ -17,28 +17,31 @@ services:
     environment:
       - ADDRESS=0.0.0.0:8000
       - RUST_LOG=debug
+    volumes:
+      - backend-cache:/code/backend/target
     networks:
       - client-side
       - server-side
+    tty: true
     depends_on:
       - db
   
   db:
     image: "redis:bullseye"
     restart: always
-    environment:
-      - name=value
     networks:
       - server-side
     ports:
-      - "6379:6379"
+      - "6379:6379" # 基本的には6379番が使われている
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ] # config設定
     volumes:
-      - db-data:/var/lib/redis/data
+      - db-data:/data # redisはデフォルトでは/dataに保存される
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
     
 networks:
   client-side: {}
   server-side: {}
 
 volumes:
-  backend-cache: {}
-  db-data: {}
+  backend-cache:
+  db-data:
