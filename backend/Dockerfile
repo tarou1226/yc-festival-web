@@ -4,7 +4,8 @@ ENV USER=root
 
 WORKDIR /code
 RUN mkdir backend
-RUN cd backend
+
+WORKDIR /code/backend
 RUN cargo init
 COPY . /code/backend
 
