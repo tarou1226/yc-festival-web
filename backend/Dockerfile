@@ -1,13 +1,9 @@
 FROM rust:bullseye AS base
 
 ENV USER=root
-
-WORKDIR /code
-RUN mkdir backend
-
+# 今後はgitを使って管理するので、以下のコードは修正します。
 WORKDIR /code/backend
 RUN cargo init
-COPY . /code/backend
 
 FROM base AS development
 
